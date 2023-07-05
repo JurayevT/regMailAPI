@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pochta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,7 +15,12 @@ class PochtaController extends Controller
      */
     public function index()
     {
-        
+        $pochtalar = Pochta::query()->where('active')->get();
+
+        return response([
+            'pochtalar' => $pochtalar,
+            'message' => "Barcha yuborilgan pochtalar"
+        ], 200);
     }
 
     /**
@@ -26,7 +32,7 @@ class PochtaController extends Controller
     public function store(Request $request)
     {
         $valid = Validator::make($request->all(), [
-            ['fish', 'dataBirth', 'tel_nomer', 'passport', 'jshshir', 'lavozim', 'login', 'parol', 'maqsad'], 'required'
+            ['fullName', 'birthdate', 'phoneNumber', 'passport', 'pinfl', 'position', 'login', 'password', 'message'], 'required'
         ]);
         if ($valid->fails())
             return response([
@@ -40,14 +46,55 @@ class PochtaController extends Controller
             return response([
                 'message' => "Login uchun elektron pochta tanlang!"
             ], 303);
-            
+
         $valid = Validator::make($request->all(), [
-            'login' => 'email'
+            'login' => 'unique:App\Models\Pochta,login'
         ]);
         if ($valid->fails())
             return response([
-                'message' => "Login uchun elektron pochta tanlang!"
+                'message' => "Bu login avval foydalanilgan.\nIltimos qayta kiriting!"
             ], 303);
+            
+        $valid = Validator::make($request->all(), [
+            'password' => 'confirmed' // password_confirmation
+        ]);
+        if ($valid->fails())
+            return response([
+                'message' => "Parolni bir xil kiriting!"
+            ], 303);
+        
+        $valid = Validator::make($request->all(), [
+            'password' => 'min:8'
+        ]);
+        if ($valid->fails())
+            return response([
+                'message' => "Parol kamida 8 ta belgidan iborat bo'lsin!"
+            ], 303);
+
+        $valid = Validator::make($request->all(), [
+            'pinfl' => 'min:14|max:14'
+        ]);
+        if ($valid->fails())
+            return response([
+                'message' => "JShShIR maydoni 14 ta belgidan iborat bo'lsin!"
+            ], 303);
+
+        $data = new Pochta;
+        $data->fullName = $request->fullName;
+        $data->birthdate = $request->birthdate;
+        $data->phoneNumber = $request->phoneNumber;
+        $data->passport = $request->passport;
+        $data->pinfl = $request->pinfl;
+        $data->position = $request->position;
+        $data->login = $request->login;
+        $data->password = $request->password;
+        $data->message = $request->message;
+        $data->save();
+
+        return response([
+            'data' => $data,
+            'message' => "Sizning ma'lumotlariz bazaga saqlandi"
+        ], 200);
     }
 
     /**
@@ -58,7 +105,12 @@ class PochtaController extends Controller
      */
     public function show($id)
     {
-        //
+        $pochta = Pochta::query()->where('active')->findOrFail($id);
+
+        return response([
+            'pochta' => $pochta,
+            'message'=> "Tanlagan pochtangiz mq'lumotlari"
+        ]);
     }
 
     /**
@@ -68,10 +120,10 @@ class PochtaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    // public function update(Request $request, $id)
+    // {
+        
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -79,8 +131,8 @@ class PochtaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+    // public function destroy($id)
+    // {
+        
+    // }
 }

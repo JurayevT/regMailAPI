@@ -15,15 +15,15 @@ class CreatePochtasTable extends Migration
     {
         Schema::create('pochtas', function (Blueprint $table) {
             $table->id();
-            $table->string('fish', 100);
-            $table->string('dataBirth', 30);
-            $table->string('tel_nomer', 20);
+            $table->string('fullName', 100);
+            $table->string('birthdate', 30);
+            $table->string('phoneNumber', 20);
             $table->string('passport', 15);
-            $table->string('jshshir', 15);
-            $table->string('lavozim', 50);
+            $table->string('pinfl', 15);
+            $table->string('position', 50);
             $table->string('login', 30);
-            $table->string('parol', 100);
-            $table->string('maqsad');
+            $table->string('password', 100);
+            $table->string('message');
             $table->unsignedTinyInteger('status')->default(0);
             $table->boolean('active')->default(true);
             $table->timestamps();
