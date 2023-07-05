@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PochtaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-// Auth route
+// Auth api
 Route::post('/login', [AuthController::class, 'login']);
 
-
+// Pochta uchun api lar
+Route::post('pochta', [PochtaController::class, 'store']);
