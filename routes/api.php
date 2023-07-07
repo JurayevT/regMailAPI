@@ -25,3 +25,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Pochta uchun api lar
 Route::post('pochta', [PochtaController::class, 'store']);
+
+// Admin api lari
+Route::prefix('admin')->group(['middleware' => 'auth:sanctum'], function ()
+{
+    Route::get('/pochta', [PochtaController::class, 'index']);
+    Route::get('/pochta/{id}', [PochtaController::class, 'show']);
+});
