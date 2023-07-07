@@ -27,8 +27,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('pochta', [PochtaController::class, 'store']);
 
 // Admin api lari
-Route::prefix('admin')->group(['middleware' => 'auth:sanctum'], function ()
+Route::prefix('admin')->group(function ()
 {
-    Route::get('/pochta', [PochtaController::class, 'index']);
-    Route::get('/pochta/{id}', [PochtaController::class, 'show']);
+    Route::group(['middleware' => 'auth:sanctum'], function ()
+    {
+        Route::get('/pochta', [PochtaController::class, 'index']);
+        Route::get('/pochta/{id}', [PochtaController::class, 'show']);
+    });
 });
