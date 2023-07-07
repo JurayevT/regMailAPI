@@ -113,6 +113,28 @@ class PochtaController extends Controller
         ]);
     }
 
+    public function checkPost(Request $req, $id)
+    {
+        $pochta = Pochta::findOrFail($id);
+
+        if ($req->answer == '1') {
+            $pochta->status = 1;
+            $pochta->save();
+
+            return response([
+                'message' => "Pochta ochildi deb belgilandi"
+            ]);
+        }
+        if ($req->answer == '2') {
+            $pochta->status = 2;
+            $pochta->save();
+
+            return response([
+                'message' => "Pochta ochilishi jarayoni bekor qilindi"
+            ]);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
