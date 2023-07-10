@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PochtaController;
+use Illuminate\Database\Connectors\PostgresConnector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Pochta uchun api lar
 Route::post('pochta', [PochtaController::class, 'store']);
+Route::post('pochta/check', [PochtaController::class, 'checkStatus']);
 
 // Admin api lari
 Route::prefix('admin')->group(function ()

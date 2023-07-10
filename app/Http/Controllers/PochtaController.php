@@ -135,6 +135,44 @@ class PochtaController extends Controller
         }
     }
 
+    public function checkStatus(Request $req)
+    {
+        $pochta = Pochta::query()->where('login', $req->login)->get();
+
+        $message= "";
+
+        if (!$pochta) {
+            $message = "Bunday login mavjud emas.";
+
+            return response([
+                'message' => $message
+            ], 204);
+        }
+        else {
+            if ($pochta->status == 0) {
+                $message = "Bu foydalanuvchi ma'lumotlari hali ko'rib chiqilmadi.";
+
+                return response([
+                    'message' => $message
+                ], 203);
+            }
+            elseif ($pochta->status == 1) {
+                $message = "Bu foydalanuvchi uchun elektron pochta ochildi.";
+
+                return response([
+                    'message' => $message
+                ], 200);
+            }
+            else {
+                $message = "Pochta ochish rad etildi.";
+
+                return response([
+                    'message' => $message
+                ], 202);
+            }
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
