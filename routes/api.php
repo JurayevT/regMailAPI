@@ -33,5 +33,6 @@ Route::prefix('admin')->group(function ()
     {
         Route::get('/pochta', [PochtaController::class, 'index']);
         Route::get('/pochta/{id}', [PochtaController::class, 'show']);
+        Route::post('pochta/check/{id}', [PochtaController::class, 'checkPost']);
     });
 });

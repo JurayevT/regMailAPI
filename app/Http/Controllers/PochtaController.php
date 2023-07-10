@@ -130,7 +130,7 @@ class PochtaController extends Controller
             $pochta->save();
 
             return response([
-                'message' => "Pochta ochilishi jarayoni bekor qilindi"
+                'message' => "Pochta ochib bo'lmadi.\nFoydalanuvchi ma'lumotlarida kamchilik bor."
             ]);
         }
     }
