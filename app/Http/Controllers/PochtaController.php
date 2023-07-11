@@ -15,7 +15,7 @@ class PochtaController extends Controller
      */
     public function index()
     {
-        $pochtalar = Pochta::query()->where('active')->get();
+        $pochtalar = Pochta::query()->where('active', 1)->get();
 
         return response([
             'pochtalar' => $pochtalar,
@@ -105,7 +105,7 @@ class PochtaController extends Controller
      */
     public function show($id)
     {
-        $pochta = Pochta::query()->where('active')->findOrFail($id);
+        $pochta = Pochta::query()->where('active', 1)->findOrFail($id);
 
         return response([
             'pochta' => $pochta,
