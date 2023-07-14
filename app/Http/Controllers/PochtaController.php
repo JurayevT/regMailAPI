@@ -13,9 +13,25 @@ class PochtaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pochtalar = Pochta::query()->where('active', 1)->get();
+        $pochtalar = Pochta::query()->where('active', 1)->orderBy('id', 'DESC');
+
+        $search_status = $request->input('search_status');
+
+        if ($search_status != '') {
+            $pochtalar->where(function ($q) use ($search_status) {
+                return $q->where('status', $search_status);
+            });
+        }
+
+        $pochtalar = $pochtalar->paginate();
+        $pochtalar->appends([
+            'search_status' => $search_status
+        ]);
+        $pochtalar = $pochtalar->all();
+
+        // $pochtalar = Pochta::query()->where('active', 1)->get();
 
         return response([
             'pochtalar' => $pochtalar,
@@ -32,7 +48,16 @@ class PochtaController extends Controller
     public function store(Request $request)
     {
         $valid = Validator::make($request->all(), [
-            ['fullName', 'birthdate', 'phoneNumber', 'passport', 'pinfl', 'position', 'login', 'password', 'message'], 'required'
+            // ['fullName', 'birthdate', 'phoneNumber', 'passport', 'pinfl', 'position', 'login', 'password', 'message'], 'required'
+            'fullName' => 'required',
+            'birthdate' => 'required',
+            'phoneNumber' => 'required',
+            'passport' => 'required',
+            'pinfl' => 'required',
+            'position' => 'required',
+            'login' => 'required',
+            'password' => 'required',
+            'message' => 'required'
         ]);
         if ($valid->fails())
             return response([
@@ -137,38 +162,40 @@ class PochtaController extends Controller
 
     public function checkStatus(Request $req)
     {
-        $pochta = Pochta::query()->where('login', $req->login)->get();
+        $pochta = Pochta::query()->where('login', $req->login)->first();
 
         $message= "";
 
-        if (!$pochta) {
-            $message = "Bunday login mavjud emas.";
-
+        if ($pochta == NULL) {
             return response([
-                'message' => $message
-            ], 204);
+                'message' => "Siz mavjud bo'lmagan login kiritdiz.",
+                'status' => 3
+            ]);
         }
         else {
             if ($pochta->status == 0) {
                 $message = "Bu foydalanuvchi ma'lumotlari hali ko'rib chiqilmadi.";
 
                 return response([
-                    'message' => $message
-                ], 203);
+                    'message' => $message,
+                    'status' => 0
+                ]);
             }
             elseif ($pochta->status == 1) {
                 $message = "Bu foydalanuvchi uchun elektron pochta ochildi.";
 
                 return response([
-                    'message' => $message
-                ], 200);
+                    'message' => $message,
+                    'status' => 1
+                ]);
             }
             else {
                 $message = "Pochta ochish rad etildi.";
 
                 return response([
-                    'message' => $message
-                ], 202);
+                    'message' => $message,
+                    'status' => 2
+                ]);
             }
         }
     }
