@@ -15,7 +15,7 @@ class PochtaController extends Controller
      */
     public function index(Request $request)
     {
-        $pochtalar = Pochta::query()->where('active', 1)->orderBy('id', 'DESC');
+        $pochtalar = Pochta::query()->where('active', 1)->orderBy('id', 'ASC');
 
         $search_status = $request->input('search_status');
 
