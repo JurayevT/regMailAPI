@@ -13,29 +13,41 @@ class PochtaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $pochtalar = Pochta::query()->where('active', 1)->orderBy('id', 'ASC');
+        $pochtalar = Pochta::query()->where('active', 1)->orderBy('id', 'ASC')->get();
 
-        $search_status = $request->input('search_status');
+        // $search_status = $request->input('search_status');
 
-        if ($search_status != '') {
-            $pochtalar->where(function ($q) use ($search_status) {
-                return $q->where('status', $search_status);
-            });
-        }
+        // if ($search_status != '') {
+        //     $pochtalar->where(function ($q) use ($search_status) {
+        //         return $q->where('status', $search_status);
+        //     });
+        // }
 
-        $pochtalar = $pochtalar->paginate();
-        $pochtalar->appends([
-            'search_status' => $search_status
-        ]);
-        $pochtalar = $pochtalar->all();
+        // $pochtalar = $pochtalar->paginate();
+        // $pochtalar->appends([
+        //     'search_status' => $search_status
+        // ]);
+        // $pochtalar = $pochtalar->all();
 
         // $pochtalar = Pochta::query()->where('active', 1)->get();
 
         return response([
             'pochtalar' => $pochtalar,
             'message' => "Barcha yuborilgan pochtalar"
+        ], 200);
+    }
+
+    public function indexFilter($status)
+    {
+        $pochtalar = Pochta::query()->where('active', 1)
+                            ->where('status', $status)
+                            ->orderBy('id', 'ASC')->get();
+        
+        return response([
+            'pochtalar' => $pochtalar,
+            'message' => "Filterlangan pochtalar"
         ], 200);
     }
 
