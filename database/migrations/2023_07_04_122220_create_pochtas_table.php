@@ -24,7 +24,7 @@ class CreatePochtasTable extends Migration
             $table->string('login', 30);
             $table->string('password', 100);
             $table->string('message');
-            $table->unsignedTinyInteger('status')->default(0);
+            $table->string('status')->default("Yangi");
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

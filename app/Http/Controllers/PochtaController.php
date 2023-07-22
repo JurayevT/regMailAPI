@@ -39,17 +39,20 @@ class PochtaController extends Controller
         ], 200);
     }
 
-    public function indexFilter($status)
-    {
-        $pochtalar = Pochta::query()->where('active', 1)
-                            ->where('status', $status)
-                            ->orderBy('id', 'ASC')->get();
+    // public function indexFilter($status)
+    // {
+    //     if ($status == null) {
+            
+    //     }
+    //     $pochtalar = Pochta::query()->where('active', 1)
+    //                         ->where('status', $status)
+    //                         ->orderBy('id', 'ASC')->get();
         
-        return response([
-            'pochtalar' => $pochtalar,
-            'message' => "Filterlangan pochtalar"
-        ], 200);
-    }
+    //     return response([
+    //         'pochtalar' => $pochtalar,
+    //         'message' => "Filterlangan pochtalar"
+    //     ], 200);
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -155,7 +158,7 @@ class PochtaController extends Controller
         $pochta = Pochta::findOrFail($id);
 
         if ($req->answer == '1') {
-            $pochta->status = 1;
+            $pochta->status = "Tasdiqlangan";
             $pochta->save();
 
             return response([
@@ -163,7 +166,7 @@ class PochtaController extends Controller
             ]);
         }
         if ($req->answer == '2') {
-            $pochta->status = 2;
+            $pochta->status = "Rad etilgan";
             $pochta->save();
 
             return response([
@@ -185,7 +188,7 @@ class PochtaController extends Controller
             ]);
         }
         else {
-            if ($pochta->status == 0) {
+            if ($pochta->status == "Yangi") {
                 $message = "Bu foydalanuvchi ma'lumotlari hali ko'rib chiqilmadi.";
 
                 return response([
@@ -193,7 +196,7 @@ class PochtaController extends Controller
                     'status' => 0
                 ]);
             }
-            elseif ($pochta->status == 1) {
+            elseif ($pochta->status == "Tasdiqlangan") {
                 $message = "Bu foydalanuvchi uchun elektron pochta ochildi.";
 
                 return response([

@@ -34,7 +34,7 @@ Route::prefix('admin')->group(function ()
     Route::group(['middleware' => 'auth:sanctum'], function ()
     {
         Route::get('/pochta', [PochtaController::class, 'index']);
-        Route::get('/pochtalar/{status}', [PochtaController::class, 'indexFilter']);
+        // Route::get('/pochtalar/{status}', [PochtaController::class, 'indexFilter']);
         Route::get('/pochta/{id}', [PochtaController::class, 'show']);
         Route::post('pochta/check/{id}', [PochtaController::class, 'checkPost']);
     });
